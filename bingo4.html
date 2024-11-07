@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bingo Game</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+        td {
+            width: 70px;
+            height: 70px;
+            text-align: center;
+            border: 3px solid #000;
+            cursor: pointer;
+        }
+        .marked {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">BINGO</h1>
+    <table id="bingoTable"></table>
+    <script>
+        const size = 5;
+        const table = document.getElementById('bingoTable');
+        let count1 = 0, count2 = 0, count3 = 0, count4 = 0, count5 = 0;
+        let count6 = 0, count7 = 0, count8 = 0, count9 = 0, count10 = 0;
+        const numbers1 = [], numbers2 = [], numbers3 = [], numbers4 = [], numbers5 = [];
+        let bingoAchieved = false; // フラグを追加
+        
+        // それぞれの範囲のリストを生成
+        for (let i = 1; i <= 75; i++) {
+            if (i <= 15) {
+                numbers1.push(i);
+            } else if (i <= 30) {
+                numbers2.push(i);
+            } else if (i <= 45) {
+                numbers3.push(i);
+            } else if (i <= 60) {
+                numbers4.push(i);
+            } else {
+                numbers5.push(i);
+            }
+        }
+        
+        // シャッフル
+        numbers1.sort(() => Math.random() - 0.5);
+        numbers2.sort(() => Math.random() - 0.5);
+        numbers3.sort(() => Math.random() - 0.5);
+        numbers4.sort(() => Math.random() - 0.5);
+        numbers5.sort(() => Math.random() - 0.5);
+        
+        // j番目にそれぞれの範囲のリストを割り当て
+        for (let i = 0; i < size; i++) {
+            const row = document.createElement('tr');
+            for (let j = 0; j < size; j++) {
+                const cell = document.createElement('td');
+                if (i === Math.floor(size / 2) && j === Math.floor(size / 2)) {
+                    cell.textContent = 'FREE';
+                } else if (j === 0) {
+                    cell.textContent = numbers1.pop();
+                } else if (j === 1) {
+                    cell.textContent = numbers2.pop();
+                } else if (j === 2) {
+                    cell.textContent = numbers3.pop();
+                } else if (j === 3) {
+                    cell.textContent = numbers4.pop();
+                } else if (j === 4) {
+                    cell.textContent = numbers5.pop();
+                }
+                
+                cell.addEventListener('click', () => {
+                    if (bingoAchieved) return; // ビンゴが達成されたら何もしない
+                    
+                    cell.classList.toggle('marked');
+                    if (cell.classList.contains('marked')) {
+                        if (i === 0) count1++;
+                        if (i === 1) count2++;
+                        if (i === 2) count3++;
+                        if (i === 3) count4++;
+                        if (i === 4) count5++;
+                        if (j === 0) count6++;
+                        if (j === 1) count7++;
+                        if (j === 2) count8++;
+                        if (j === 3) count9++;
+                        if (j === 4) count10++;
+                    } else {
+                        if (i === 0) count1--;
+                        if (i === 1) count2--;
+                        if (i === 2) count3--;
+                        if (i === 3) count4--;
+                        if (i === 4) count5--;
+                        if (j === 0) count6--;
+                        if (j === 1) count7--;
+                        if (j === 2) count8--;
+                        if (j === 3) count9--;
+                        if (j === 4) count10--;
+                    }
+                    
+                    if (count1 === 5 || count2 === 5 || count3 === 5 || count4 === 5 || count5 === 5 ||
+                        count6 === 5 || count7 === 5 || count8 === 5 || count9 === 5 || count10 === 5) {
+                        bingoAchieved = true; // ビンゴが達成されたことを記録
+                        alert("BINGO");
+                    }
+                });
+                row.appendChild(cell);
+            }
+            table.appendChild(row);
+        }
+    </script>
+</body>
+</html>
